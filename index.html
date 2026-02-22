@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 面试准备助手</title>
+<style>
+:root{--p:#6366f1;--ph:#4f46e5;--pl:#e0e7ff;--bg:#f8fafc;--card:#fff;--tx:#1e293b;--ts:#64748b;--bd:#e2e8f0;--ok:#10b981;--wn:#f59e0b;--ng:#ef4444;--r:12px;--sh:0 1px 3px rgba(0,0,0,.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.6}
+.container{max-width:880px;margin:0 auto;padding:16px}
+header{text-align:center;padding:24px 0 16px}
+header h1{font-size:1.7rem;background:linear-gradient(135deg,var(--p),#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--ts);font-size:.9rem;margin-top:4px}
+.card{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--sh);margin-bottom:16px;border:1px solid var(--bd)}
+.card h2{font-size:1.1rem;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-p{background:var(--p);color:#fff}.btn-p:hover{background:var(--ph);transform:translateY(-1px)}.btn-p:disabled{background:#94a3b8;cursor:not-allowed;transform:none}
+.btn-s{background:var(--pl);color:var(--p)}.btn-s:hover{background:#c7d2fe}
+.btn-d{background:#fee2e2;color:var(--ng)}.btn-d:hover{background:#fecaca}
+.btn-ok{background:#d1fae5;color:#059669}.btn-ok:hover{background:#a7f3d0}
+.btn-sm{padding:6px 14px;font-size:.82rem}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:.86rem}
+input[type=text],input[type=password],textarea,select{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:8px;font-size:.9rem;font-family:inherit;background:#fff;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+textarea{resize:vertical;min-height:120px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 16px;border:2px solid var(--bd);border-radius:10px;cursor:pointer;font-size:.86rem;font-weight:500;transition:all .2s;user-select:none}
+.chip:hover{border-color:var(--p);background:var(--pl)}
+.chip.on{border-color:var(--p);background:var(--p);color:#fff}
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:#f1f5f9;border-radius:10px;padding:4px;overflow-x:auto}
+.tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--ts);transition:all .2s;white-space:nowrap}
+.tab.on{background:#fff;color:var(--p);box-shadow:var(--sh)}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.73rem;font-weight:600}
+.b-tech{background:#dbeafe;color:#1d4ed8}.b-beh{background:#fef3c7;color:#92400e}
+.timer{font-size:2rem;font-weight:700;text-align:center;padding:12px;font-variant-numeric:tabular-nums;color:var(--p)}
+.timer.wn{color:var(--wn)}.timer.ng{color:var(--ng)}
+.pbar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin:8px 0}
+.pbar .fill{height:100%;background:var(--p);border-radius:3px;transition:width .3s}
+.qcard{background:#f8fafc;border-radius:10px;padding:16px;margin-bottom:10px;border-left:4px solid var(--p);cursor:pointer;transition:background .2s}
+.qcard:hover{background:#eef2ff}
+.qcard .qn{font-size:.78rem;color:var(--ts);margin-bottom:4px}
+.qcard .qt{font-size:.95rem;font-weight:500}
+.fb{border-radius:10px;padding:20px;margin-top:14px}
+.fb.good{background:#f0fdf4;border:1px solid #bbf7d0}
+.fb.ok{background:#fffbeb;border:1px solid #fde68a}
+.fb.bad{background:#fef2f2;border:1px solid #fecaca}
+.sc{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:#fff;margin:0 auto 8px}
+.hi{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
+.hi:last-child{border-bottom:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.stat{text-align:center;padding:12px;background:#f8fafc;border-radius:10px}
+.stat .n{font-size:1.4rem;font-weight:700;color:var(--p)}
+.stat .l{font-size:.75rem;color:var(--ts);margin-top:2px}
+.flex{display:flex;align-items:center;gap:8px}
+.between{justify-content:space-between}
+.hidden{display:none!important}
+.mt{margin-top:14px}
+.mb{margin-bottom:14px}
+.loading::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;margin-left:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:10px;font-size:.86rem;font-weight:500;z-index:1000;animation:fadeIn .3s;max-width:340px;box-shadow:0 10px 15px rgba(0,0,0,.1)}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.tabs{gap:2px}.tab{padding:8px 4px;font-size:.76rem}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>🎯 AI 面试准备助手</h1>
+  <p>智能生成面试题 · 模拟面试 · AI评估反馈</p>
+  <div class="stats" id="statsBar">
+    <div class="stat"><div class="n" id="stTotal">0</div><div class="l">总练习</div></div>
+    <div class="stat"><div class="n" id="stAvg">0</div><div class="l">平均分</div></div>
+    <div class="stat"><div class="n" id="stDays">0</div><div class="l">练习天数</div></div>
+    <div class="stat"><div class="n" id="stBest">0</div><div class="l">最高分</div></div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab on" data-t="setup">⚙️ 设置</div>
+  <div class="tab" data-t="practice">📝 练习</div>
+  <div class="tab" data-t="mock">🎤 模拟</div>
+  <div class="tab" data-t="bank">📚 题库</div>
+  <div class="tab" data-t="history">📊 历史</div>
+</div>
+
+<!-- Setup Tab -->
+<div id="t-setup" class="page">
+  <div class="card">
+    <h2>🔑 API 设置</h2>
+    <div class="form-group">
+      <label>DeepSeek API Key</label>
+      <div class="flex gap8">
+        <input type="password" id="apiKey" placeholder="sk-...">
+        <button class="btn btn-p btn-sm" onclick="saveKey()">保存</button>
+      </div>
+      <p style="font-size:.78rem;color:var(--ts);margin-top:4px">从 <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a> 获取</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💼 职位类型</h2>
+    <div class="chips" id="jobChips">
+      <div class="chip" data-v="前端">💻 前端</div>
+      <div class="chip on" data-v="全栈">🔄 全栈</div>
+      <div class="chip" data-v="后端">⚙️ 后端</div>
+      <div class="chip" data-v="产品">📋 产品</div>
+      <div class="chip" data-v="设计">🎨 设计</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📊 难度级别</h2>
+    <div class="chips" id="diffChips">
+      <div class="chip" data-v="初级">🌱 初级</div>
+      <div class="chip on" data-v="中级">🌿 中级</div>
+      <div class="chip" data-v="高级">🌳 高级</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🏢 公司定向准备（可选）</h2>
+    <div class="form-group">
+      <input type="text" id="companyInput" placeholder="输入目标公司名称，如：字节跳动、阿里巴巴...">
+    </div>
+  </div>
+</div>
+
+<!-- Practice Tab -->
+<div id="t-practice" class="page hidden">
+  <div class="card">
+    <div class="flex between mb">
+      <h2>📝 生成面试题</h2>
+      <div class="flex">
+        <button class="btn btn-s btn-sm" onclick="useBank()">📚 用题库</button>
+        <button class="btn btn-p btn-sm" id="btnGen" onclick="genQuestions()">🤖 AI生成</button>
+      </div>
+    </div>
+    <div id="qList"></div>
+  </div>
+  <div id="answerPanel" class="card hidden">
+    <div class="flex between mb">
+      <h2>✍️ 回答问题</h2>
+      <div class="timer" id="pTimer">00:00</div>
+    </div>
+    <div class="qcard" id="pQuestion"></div>
+    <div class="form-group mt"><textarea id="pAnswer" placeholder="在此输入你的回答..."></textarea></div>
+    <div class="flex between">
+      <button class="btn btn-s btn-sm" onclick="pSkip()">跳过</button>
+      <button class="btn btn-p" id="btnEval" onclick="pSubmit()">提交评估</button>
+    </div>
+    <div id="pFeedback"></div>
+  </div>
+</div>
+
+<!-- Mock Interview Tab -->
+<div id="t-mock" class="page hidden">
+  <div id="mockSetup" class="card">
+    <h2>🎤 模拟面试</h2>
+    <p style="color:var(--ts);font-size:.88rem" class="mb">模拟真实面试场景，逐题作答，限时完成</p>
+    <div class="grid-2 mb">
+      <div class="form-group"><label>题目来源</label>
+        <select id="mockSrc"><option value="ai">AI 生成</option><option value="bank">题库随机</option></select>
+      </div>
+      <div class="form-group"><label>每题限时</label>
+        <select id="mockTime"><option value="180">3 分钟</option><option value="300">5 分钟</option><option value="0">不限时</option></select>
+      </div>
+    </div>
+    <button class="btn btn-p" id="btnMock" onclick="startMock()" style="width:100%">🚀 开始模拟面试</button>
+  </div>
+  <div id="mockActive" class="hidden">
+    <div class="card">
+      <div class="flex between mb"><span style="color:var(--ts)" id="mockProg">1 / 8</span><button class="btn btn-d btn-sm" onclick="endMock()">结束面试</button></div>
+      <div class="pbar"><div class="fill" id="mockBar" style="width:0%"></div></div>
+      <div class="timer" id="mockTimer">03:00</div>
+      <div class="qcard" id="mockQ"></div>
+      <div class="form-group mt"><textarea id="mockAns" placeholder="在此输入你的回答..." rows="6"></textarea></div>
+      <div class="flex between">
+        <button class="btn btn-s" onclick="mockSkip()">跳过</button>
+        <button class="btn btn-p" id="btnMockSub" onclick="mockSubmit()">提交答案</button>
+      </div>
+      <div id="mockFb"></div>
+    </div>
+  </div>
+  <div id="mockResult" class="hidden">
+    <div class="card" style="text-align:center">
+      <h2>🎉 面试完成！</h2>
+      <div class="sc mt" id="mockSc" style="width:72px;height:72px;font-size:1.5rem">0</div>
+      <p style="color:var(--ts)">综合评分</p>
+      <div class="stats mt">
+        <div class="stat"><div class="n" id="mrAns">0</div><div class="l">已答</div></div>
+        <div class="stat"><div class="n" id="mrSkip">0</div><div class="l">跳过</div></div>
+        <div class="stat"><div class="n" id="mrAvg">0</div><div class="l">均分</div></div>
+        <div class="stat"><div class="n" id="mrTime">0</div><div class="l">用时(分)</div></div>
+      </div>
+    </div>
+    <div id="mrDetails"></div>
+    <div style="text-align:center" class="mt"><button class="btn btn-p" onclick="resetMock()">再来一次</button></div>
+  </div>
+</div>
+
+<!-- Bank Tab -->
+<div id="t-bank" class="page hidden">
+  <div class="card">
+    <div class="flex between mb">
+      <h2>📚 常见面试题库</h2>
+      <select id="bankJob" onchange="renderBank()" style="width:auto;padding:6px 10px"></select>
+    </div>
+    <div id="bankList"></div>
+  </div>
+</div>
+
+<!-- History Tab -->
+<div id="t-history" class="page hidden">
+  <div class="card">
+    <div class="flex between mb">
+      <h2>📊 答题历史</h2>
+      <button class="btn btn-d btn-sm" onclick="clearHist()">清空记录</button>
+    </div>
+    <div id="histList"></div>
+  </div>
+</div>
+
+</div>
+<script>
+// ===== State =====
+const S = {
+  key: localStorage.getItem('ds_key') || '',
+  job: '全栈', diff: '中级', company: '',
+  tab: 'setup',
+  qs: [], qi: 0,
+  timer: null, secs: 0,
+  mockQs: [], mockI: 0, mockLimit: 180, mockResults: [], mockStart: 0,
+  hist: JSON.parse(localStorage.getItem('iv_hist') || '[]'),
+};
+
+const BANK = {
+  '前端': {
+    tech: [
+      'CSS中BFC是什么？如何触发？有什么应用场景？',
+      '请解释JavaScript事件循环（Event Loop）机制',
+      'Vue的响应式原理是什么？Vue2和Vue3有什么区别？',
+      'React中useEffect和useLayoutEffect的区别？',
+      '什么是虚拟DOM？它的优缺点是什么？',
+      '浏览器从输入URL到页面渲染的完整过程',
+      'webpack的热更新(HMR)原理是什么？',
+      'TypeScript中type和interface的区别？',
+      '前端性能优化有哪些常见手段？',
+      '跨域问题的解决方案有哪些？'
+    ],
+    beh: [
+      '描述一个你解决过的最复杂的前端技术难题',
+      '你如何处理与设计师在UI实现上的分歧？',
+      '说说你在团队协作中遇到的挑战及解决方式'
+    ]
+  },
+  '后端': {
+    tech: [
+      '数据库索引的原理，B+树和Hash索引的区别',
+      'Redis的持久化机制有哪些？各自的优缺点？',
+      '什么是CAP定理？在实际系统中如何取舍？',
+      '微服务架构的优缺点是什么？',
+      'SQL注入的原理和防范措施有哪些？',
+      '如何设计一个高并发的秒杀系统？',
+      'HTTP和HTTPS的区别？HTTPS的握手过程？',
+      '消息队列的使用场景和常见问题？',
+      'Docker和虚拟机的区别是什么？',
+      '分布式事务有哪些解决方案？'
+    ],
+    beh: [
+      '描述一次你处理线上故障的经历',
+      '你如何在紧迫的deadline下保证代码质量？',
+      '说说你主导过的一个技术方案设计过程'
+    ]
+  },
+  '全栈': {
+    tech: [
+      '前后端分离架构的优缺点是什么？',
+      '如何设计RESTful API？REST和GraphQL的区别？',
+      'JWT认证的原理和安全注意事项？',
+      'WebSocket和HTTP长轮询的区别和使用场景？',
+      '如何实现前后端的统一错误处理？',
+      'CI/CD流程中你通常包含哪些步骤？',
+      'SSR和CSR的区别？什么场景下选择SSR？',
+      '如何设计一个可扩展的权限管理系统？',
+      'Monorepo和Multirepo的优缺点？',
+      '如何保证前后端数据一致性？'
+    ],
+    beh: [
+      '你如何平衡前端和后端的开发工作？',
+      '描述一个你从0到1搭建的项目',
+      '当前端和后端需求冲突时你如何处理？'
+    ]
+  },
+  '产品': {
+    tech: [
+      '如何进行用户需求分析？常用方法有哪些？',
+      '请描述一个完整的产品设计流程',
+      'A/B测试的原理和注意事项？',
+      '如何定义和追踪产品核心指标(KPI)？',
+      '如何做竞品分析？分析框架是什么？',
+      'MVP的概念和实践方法？',
+      '用户故事(User Story)怎么写？',
+      '如何处理需求优先级排序？',
+      '产品路线图(Roadmap)如何制定？',
+      '如何衡量产品的用户体验？'
+    ],
+    beh: [
+      '描述一次你说服团队改变方向的经历',
+      '如何处理开发资源不足但需求紧急的情况？',
+      '你如何收集和处理用户反馈？'
+    ]
+  },
+  '设计': {
+    tech: [
+      '设计系统(Design System)包含哪些要素？',
+      '响应式设计的核心原则是什么？',
+      '用户体验设计的五要素模型是什么？',
+      '如何进行可用性测试？',
+      '色彩理论在UI设计中的应用？',
+      '什么是设计思维(Design Thinking)？',
+      '如何设计无障碍(Accessibility)友好的界面？',
+      '信息架构(IA)的设计方法？',
+      '交互设计的基本原则有哪些？',
+      '如何建立和维护设计规范？'
+    ],
+    beh: [
+      '描述一次你的设计方案被否定后如何调整的',
+      '你如何与开发团队协作确保设计还原度？',
+      '如何平衡美观和可用性？举个例子'
+    ]
+  }
+};
+
+// ===== Helpers =====
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+function toast(msg, ok=true) {
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const d = document.createElement('div');
+  d.className = 'toast';
+  d.style.background = ok ? '#f0fdf4' : '#fef2f2';
+  d.style.color = ok ? '#16a34a' : '#dc2626';
+  d.style.border = '1px solid ' + (ok ? '#bbf7d0' : '#fecaca');
+  d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(()=>{d.style.opacity='0';d.style.transition='opacity .3s';setTimeout(()=>d.remove(),300)},3000);
+}
+
+function show(id){document.getElementById(id).classList.remove('hidden')}
+function hide(id){document.getElementById(id).classList.add('hidden')}
+
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+
+// ===== Tabs =====
+function switchTab(t) {
+  S.tab = t;
+  $$('.tab').forEach(el => el.classList.toggle('on', el.dataset.t === t));
+  $$('.page').forEach(el => el.classList.toggle('hidden', el.id !== 't-' + t));
+  if (t === 'history') renderHist();
+  if (t === 'bank') renderBank();
+}
+
+// ===== API =====
+async function callAPI(messages, temp=0.7) {
+  if (!S.key) { toast('请先设置 DeepSeek API Key', false); return null; }
+  const r = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Authorization':'Bearer '+S.key},
+    body: JSON.stringify({model:'deepseek-chat',messages,temperature:temp,max_tokens:2000})
+  });
+  if (!r.ok) throw new Error('API错误: '+r.status);
+  const d = await r.json();
+  return d.choices[0].message.content;
+}
+
+function parseJSON(s) {
+  return JSON.parse(s.replace(/```json?\n?/g,'').replace(/```/g,'').trim());
+}
+
+// ===== Generate Questions =====
+async function genQuestions() {
+  const btn = $('#btnGen');
+  S.company = $('#companyInput').value.trim();
+  btn.disabled = true; btn.innerHTML = '<span class="loading">生成中</span>';
+  const cp = S.company ? `\n针对「${S.company}」公司的面试风格和技术栈生成题目。` : '';
+  const prompt = `你是资深面试官。为「${S.job}」岗位生成8道面试题，难度「${S.diff}」。${cp}
+要求：6道技术题+2道行为题，每道标注类型。
+严格按JSON格式返回（不要其他内容）：
+[{"type":"tech","question":"题目"},{"type":"beh","question":"题目"}]`;
+  try {
+    const res = await callAPI([{role:'user',content:prompt}]);
+    if (!res) { btn.disabled=false; btn.textContent='🤖 AI生成'; return; }
+    S.qs = parseJSON(res);
+    S.qi = 0;
+    renderQList();
+    toast('已生成 '+S.qs.length+' 道面试题');
+  } catch(e) { toast('生成失败: '+e.message, false); }
+  btn.disabled = false; btn.textContent = '🤖 AI生成';
+}
+
+function useBank() {
+  const b = BANK[S.job];
+  if (!b) { toast('该职位暂无题库', false); return; }
+  S.qs = [...b.tech.slice(0,6).map(q=>({type:'tech',question:q})), ...b.beh.map(q=>({type:'beh',question:q}))];
+  S.qi = 0;
+  renderQList();
+  switchTab('practice');
+  toast('已加载 '+S.qs.length+' 道题库题目');
+}
+
+function renderQList() {
+  $('#qList').innerHTML = S.qs.map((q,i) =>
+    `<div class="qcard" onclick="startPractice(${i})">
+      <div class="qn">第${i+1}题 <span class="badge ${q.type==='tech'?'b-tech':'b-beh'}">${q.type==='tech'?'技术题':'行为题'}</span></div>
+      <div class="qt">${q.question}</div>
+    </div>`
+  ).join('');
+}
+
+// ===== Practice Mode =====
+function startPractice(i) {
+  S.qi = i;
+  const q = S.qs[i];
+  $('#pQuestion').innerHTML = `<div class="qn">第${i+1}题 <span class="badge ${q.type==='tech'?'b-tech':'b-beh'}">${q.type==='tech'?'技术题':'行为题'}</span></div><div class="qt">${q.question}</div>`;
+  $('#pAnswer').value = '';
+  $('#pFeedback').innerHTML = '';
+  show('answerPanel');
+  startTimer('pTimer');
+}
+
+function startTimer(elId) {
+  clearInterval(S.timer);
+  S.secs = 0;
+  const el = $('#'+elId);
+  el.textContent = '00:00'; el.className = 'timer';
+  S.timer = setInterval(()=>{
+    S.secs++;
+    el.textContent = fmtTime(S.secs);
+    el.className = 'timer' + (S.secs>300?' ng':S.secs>180?' wn':'');
+  },1000);
+}
+
+function stopTimer(){clearInterval(S.timer)}
+
+async function pSubmit() {
+  const ans = $('#pAnswer').value.trim();
+  if (!ans) { toast('请输入回答', false); return; }
+  stopTimer();
+  const btn = $('#btnEval');
+  btn.disabled=true; btn.innerHTML='<span class="loading">评估中</span>';
+  try {
+    const fb = await evaluate(S.qs[S.qi], ans, S.secs);
+    if (fb) { renderFb('#pFeedback', fb); saveHist(S.qs[S.qi], ans, fb, S.secs); }
+  } catch(e) { toast('评估失败: '+e.message, false); }
+  btn.disabled=false; btn.textContent='提交评估';
+}
+
+function pSkip() {
+  saveHist(S.qs[S.qi], '(跳过)', {score:0,level:'bad',summary:'跳过未答',strengths:[],improvements:[],ideal:''}, S.secs);
+  stopTimer();
+  if (S.qi < S.qs.length-1) { startPractice(S.qi+1); }
+  else { hide('answerPanel'); toast('所有题目已完成！'); }
+}
+
+// ===== AI Evaluate =====
+async function evaluate(q, ans, secs) {
+  const prompt = `你是资深面试官，面试「${S.job}」岗位（${S.diff}级别）。
+题目：${q.question}
+回答：${ans}
+用时：${secs}秒
+
+评估回答，严格按JSON返回（不要其他内容）：
+{"score":85,"level":"good","summary":"一句话总评","strengths":["优点1","优点2"],"improvements":["改进1","改进2"],"ideal":"理想答案要点(2-3句)"}
+score:0-100, level:"good"(>=80)/"ok"(60-79)/"bad"(<60)`;
+  const res = await callAPI([{role:'user',content:prompt}], 0.5);
+  if (!res) return null;
+  return parseJSON(res);
+}
+
+function renderFb(sel, fb) {
+  const sc = fb.score>=80?'#10b981':fb.score>=60?'#f59e0b':'#ef4444';
+  $(sel).innerHTML = `<div class="fb ${fb.level}">
+    <div style="text-align:center;margin-bottom:14px">
+      <div class="sc" style="background:${sc}">${fb.score}</div>
+      <div style="font-weight:600">${fb.summary}</div>
+    </div>
+    ${fb.strengths.length?`<div class="mb"><strong>✅ 优点：</strong><ul style="margin:4px 0 0 18px">${fb.strengths.map(s=>'<li>'+s+'</li>').join('')}</ul></div>`:''}
+    ${fb.improvements.length?`<div class="mb"><strong>💡 改进：</strong><ul style="margin:4px 0 0 18px">${fb.improvements.map(s=>'<li>'+s+'</li>').join('')}</ul></div>`:''}
+    ${fb.ideal?`<div style="background:#f1f5f9;padding:12px;border-radius:8px"><strong>📝 参考要点：</strong><p style="margin-top:4px">${fb.ideal}</p></div>`:''}
+  </div>`;
+}
+
+// ===== Mock Interview =====
+async function startMock() {
+  const btn = $('#btnMock');
+  const src = $('#mockSrc').value;
+  S.mockLimit = parseInt($('#mockTime').value);
+  S.mockResults = [];
+  S.mockI = 0;
+  S.mockStart = Date.now();
+
+  if (src === 'ai') {
+    btn.disabled=true; btn.innerHTML='<span class="loading">生成题目中</span>';
+    S.company = $('#companyInput')?.value?.trim() || '';
+    const cp = S.company ? `\n针对「${S.company}」公司。` : '';
+    const prompt = `为「${S.job}」岗位生成8道面试题，难度「${S.diff}」。${cp}6道技术+2道行为。
+JSON格式：[{"type":"tech","question":"题目"},{"type":"beh","question":"题目"}]`;
+    try {
+      const res = await callAPI([{role:'user',content:prompt}]);
+      if (!res) { btn.disabled=false; btn.textContent='🚀 开始模拟面试'; return; }
+      S.mockQs = parseJSON(res);
+    } catch(e) { toast('生成失败: '+e.message, false); btn.disabled=false; btn.textContent='🚀 开始模拟面试'; return; }
+    btn.disabled=false; btn.textContent='🚀 开始模拟面试';
+  } else {
+    const b = BANK[S.job];
+    if (!b) { toast('该职位暂无题库', false); return; }
+    const all = [...b.tech.map(q=>({type:'tech',question:q})),...b.beh.map(q=>({type:'beh',question:q}))];
+    for (let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+    S.mockQs = all.slice(0,8);
+  }
+
+  hide('mockSetup'); show('mockActive');
+  showMockQ();
+}
+
+function showMockQ() {
+  if (S.mockI >= S.mockQs.length) { finishMock(); return; }
+  const q = S.mockQs[S.mockI];
+  const pct = ((S.mockI+1)/S.mockQs.length*100);
+  $('#mockProg').textContent = `${S.mockI+1} / ${S.mockQs.length}`;
+  $('#mockBar').style.width = pct+'%';
+  $('#mockQ').innerHTML = `<div class="qn">第${S.mockI+1}题 <span class="badge ${q.type==='tech'?'b-tech':'b-beh'}">${q.type==='tech'?'技术题':'行为题'}</span></div><div class="qt">${q.question}</div>`;
+  $('#mockAns').value = '';
+  $('#mockFb').innerHTML = '';
+
+  if (S.mockLimit > 0) {
+    let left = S.mockLimit;
+    clearInterval(S.timer);
+    const el = $('#mockTimer');
+    el.textContent = fmtTime(left); el.className = 'timer';
+    S.timer = setInterval(()=>{
+      left--;
+      el.textContent = fmtTime(left);
+      el.className = 'timer'+(left<=30?' ng':left<=60?' wn':'');
+      if (left <= 0) { clearInterval(S.timer); toast('时间到！自动提交', false); mockSubmit(); }
+    },1000);
+    S.secs = 0;
+    S._mockTimer = setInterval(()=>S.secs++,1000);
+  } else {
+    startTimer('mockTimer');
+  }
+}
+
+async function mockSubmit() {
+  const ans = $('#mockAns').value.trim();
+  clearInterval(S.timer); clearInterval(S._mockTimer);
+  const q = S.mockQs[S.mockI];
+  const secs = S.secs;
+
+  if (!ans) {
+    S.mockResults.push({q,ans:'(跳过)',fb:{score:0,level:'bad',summary:'跳过未答',strengths:[],improvements:[],ideal:''},secs});
+    saveHist(q,'(跳过)',{score:0,level:'bad',summary:'跳过'},secs);
+    S.mockI++; showMockQ(); return;
+  }
+
+  const btn = $('#btnMockSub');
+  btn.disabled=true; btn.innerHTML='<span class="loading">评估中</span>';
+  try {
+    const fb = await evaluate(q, ans, secs);
+    if (fb) {
+      S.mockResults.push({q,ans,fb,secs});
+      renderFb('#mockFb', fb);
+      saveHist(q, ans, fb, secs);
+      setTimeout(()=>{ S.mockI++; showMockQ(); }, 2000);
+    }
+  } catch(e) {
+    toast('评估失败: '+e.message, false);
+    S.mockResults.push({q,ans,fb:{score:50,level:'ok',summary:'评估失败'},secs});
+    S.mockI++; showMockQ();
+  }
+  btn.disabled=false; btn.textContent='提交答案';
+}
+
+function mockSkip() {
+  clearInterval(S.timer); clearInterval(S._mockTimer);
+  S.mockResults.push({q:S.mockQs[S.mockI],ans:'(跳过)',fb:{score:0,level:'bad',summary:'跳过'},secs:S.secs});
+  saveHist(S.mockQs[S.mockI],'(跳过)',{score:0,level:'bad',summary:'跳过'},S.secs);
+  S.mockI++; showMockQ();
+}
+
+function endMock() {
+  clearInterval(S.timer); clearInterval(S._mockTimer);
+  finishMock();
+}
+
+function finishMock() {
+  clearInterval(S.timer); clearInterval(S._mockTimer);
+  hide('mockActive');
+  const answered = S.mockResults.filter(r=>r.ans!=='(跳过)');
+  const skipped = S.mockResults.filter(r=>r.ans==='(跳过)');
+  const avg = answered.length ? Math.round(answered.reduce((s,r)=>s+r.fb.score,0)/answered.length) : 0;
+  const totalMin = Math.round((Date.now()-S.mockStart)/60000);
+  const sc = avg>=80?'#10b981':avg>=60?'#f59e0b':'#ef4444';
+
+  $('#mockSc').textContent = avg; $('#mockSc').style.background = sc;
+  $('#mrAns').textContent = answered.length;
+  $('#mrSkip').textContent = skipped.length;
+  $('#mrAvg').textContent = avg;
+  $('#mrTime').textContent = totalMin;
+
+  $('#mrDetails').innerHTML = S.mockResults.map((r,i)=>{
+    const c = r.fb.score>=80?'var(--ok)':r.fb.score>=60?'var(--wn)':'var(--ng)';
+    return `<div class="card" style="animation:fadeIn .3s ${i*0.1}s both">
+      <div class="flex between"><span class="badge ${r.q.type==='tech'?'b-tech':'b-beh'}">${r.q.type==='tech'?'技术题':'行为题'}</span><span style="font-weight:700;color:${c}">${r.fb.score}分</span></div>
+      <p style="font-weight:500;margin:8px 0">${r.q.question}</p>
+      <p style="font-size:.85rem;color:var(--ts)">${r.fb.summary||''}</p>
+    </div>`;
+  }).join('');
+  show('mockResult');
+}
+
+function resetMock() { hide('mockResult'); show('mockSetup'); }
+
+// ===== History & Stats =====
+function saveHist(q, ans, fb, secs) {
+  S.hist.unshift({
+    id: Date.now(), date: new Date().toLocaleString('zh-CN'),
+    job: S.job, diff: S.diff, company: S.company||'通用',
+    question: q.question, qtype: q.type,
+    ans, score: fb.score, level: fb.level,
+    summary: fb.summary||'', secs
+  });
+  if (S.hist.length > 200) S.hist = S.hist.slice(0,200);
+  localStorage.setItem('iv_hist', JSON.stringify(S.hist));
+  updStats();
+}
+
+function updStats() {
+  const h = S.hist;
+  const scored = h.filter(r=>r.score>0);
+  const avg = scored.length ? Math.round(scored.reduce((s,r)=>s+r.score,0)/scored.length) : 0;
+  const best = scored.length ? Math.max(...scored.map(r=>r.score)) : 0;
+  const days = new Set(h.map(r=>r.date.split(' ')[0])).size;
+  $('#stTotal').textContent = h.length;
+  $('#stAvg').textContent = avg;
+  $('#stDays').textContent = days;
+  $('#stBest').textContent = best;
+}
+
+function renderHist() {
+  const c = $('#histList');
+  if (!S.hist.length) { c.innerHTML='<p style="text-align:center;color:var(--ts);padding:40px 0">暂无记录，开始你的第一次面试练习吧！</p>'; return; }
+  c.innerHTML = S.hist.slice(0,50).map(r=>{
+    const sc = r.score>=80?'var(--ok)':r.score>=60?'var(--wn)':'var(--ng)';
+    return `<div class="hi">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.question}</div>
+        <div style="font-size:.78rem;color:var(--ts);margin-top:3px">${r.date} · ${r.job} · ${r.diff} · ${r.company}</div>
+      </div>
+      <div style="text-align:center;min-width:45px">
+        <div style="font-size:1.15rem;font-weight:700;color:${sc}">${r.score}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function clearHist() {
+  if (!confirm('确定清空所有答题记录？')) return;
+  S.hist = [];
+  localStorage.removeItem('iv_hist');
+  updStats(); renderHist();
+  toast('历史记录已清空');
+}
+
+// ===== Question Bank =====
+function renderBank() {
+  const sel = $('#bankJob');
+  const job = sel.value || S.job;
+  const b = BANK[job];
+  if (!b) { $('#bankList').innerHTML='<p>暂无题库</p>'; return; }
+  let h = '<h3 style="font-size:.92rem;margin-bottom:10px">💻 技术题</h3>';
+  b.tech.forEach((q,i)=>{
+    h += `<div class="qcard" onclick="bankStart('${job}','tech',${i})"><div class="qn">技术题 ${i+1} <span class="badge b-tech">技术</span></div><div class="qt">${q}</div></div>`;
+  });
+  h += '<h3 style="font-size:.92rem;margin:14px 0 10px">🗣️ 行为题</h3>';
+  b.beh.forEach((q,i)=>{
+    h += `<div class="qcard" onclick="bankStart('${job}','beh',${i})"><div class="qn">行为题 ${i+1} <span class="badge b-beh">行为</span></div><div class="qt">${q}</div></div>`;
+  });
+  $('#bankList').innerHTML = h;
+}
+
+function bankStart(job, type, idx) {
+  const b = BANK[job];
+  const q = type==='tech' ? b.tech[idx] : b.beh[idx];
+  S.qs = [{type, question:q}];
+  S.qi = 0;
+  switchTab('practice');
+  renderQList();
+  startPractice(0);
+}
+
+// ===== Save Key =====
+function saveKey() {
+  S.key = $('#apiKey').value.trim();
+  if (S.key) { localStorage.setItem('ds_key', S.key); toast('API Key 已保存'); }
+  else toast('请输入有效的 API Key', false);
+}
+
+// ===== Init =====
+function init() {
+  if (S.key) $('#apiKey').value = S.key;
+
+  // Job chips
+  $$('#jobChips .chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      $$('#jobChips .chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on'); S.job = c.dataset.v;
+    });
+  });
+  // Diff chips
+  $$('#diffChips .chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      $$('#diffChips .chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on'); S.diff = c.dataset.v;
+    });
+  });
+  // Tabs
+  $$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.t)));
+
+  // Bank job select
+  const sel = $('#bankJob');
+  Object.keys(BANK).forEach(k=>{
+    const o = document.createElement('option');
+    o.value=k; o.textContent=k; sel.appendChild(o);
+  });
+  sel.value = S.job;
+
+  updStats();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
