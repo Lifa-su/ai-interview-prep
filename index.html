@@ -90,6 +90,34 @@ textarea::placeholder{color:var(--text2)}
 .tab-btn{padding:10px 18px;background:none;border:none;color:var(--text2);font-size:.88rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all .3s}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-btn:hover{color:var(--text)}
+/* Pro Feature */
+.pro-section{position:relative;cursor:pointer;margin-top:20px}
+.pro-blur-content{filter:blur(5px);pointer-events:none;user-select:none;opacity:0.5}
+.pro-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;background:rgba(10,10,15,0.3);border-radius:var(--radius);border:2px dashed rgba(124,92,252,0.5);transition:all .3s}
+.pro-overlay:hover{background:rgba(124,92,252,0.08);border-color:var(--accent)}
+.pro-lock-icon{font-size:2.5rem;margin-bottom:8px}
+.pro-label{font-size:1.1rem;font-weight:700;color:var(--accent)}
+.pro-hint{font-size:0.85rem;color:var(--text2);margin-top:4px}
+.pro-modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:9999}
+.pro-modal-overlay.active{display:flex}
+.pro-modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:440px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);text-align:center;position:relative}
+.pro-modal h2{font-size:1.4rem;margin-bottom:6px}
+.pro-modal .pm-sub{color:var(--text2);font-size:0.85rem;margin-bottom:20px}
+.pro-modal ul{list-style:none;text-align:left;margin:0 0 24px;padding:0}
+.pro-modal ul li{padding:8px 0;font-size:0.9rem;color:var(--text2);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.pro-modal ul li:last-child{border-bottom:none}
+.pro-modal ul li span:first-child{color:var(--accent);font-size:1.1rem}
+.pro-modal .pm-cta{display:inline-block;width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:1rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s}
+.pro-modal .pm-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,252,0.4)}
+.pro-modal .pm-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:4px}
+.pro-modal .pm-close:hover{color:var(--text)}
+.pro-modal .pm-later{display:inline-block;margin-top:12px;background:none;border:none;color:var(--text2);font-size:0.85rem;cursor:pointer;padding:6px 12px}
+.pro-modal .pm-later:hover{color:var(--text)}
+.pro-feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.pro-feat-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.pro-feat-item .pfi{font-size:1.5rem;margin-bottom:4px}
+.pro-feat-item .pfn{font-size:0.82rem;font-weight:600}
+.pro-feat-item .pfd{font-size:0.72rem;color:var(--text2);margin-top:2px}
 </style>
 </head>
 <body>
@@ -659,6 +687,24 @@ app.innerHTML=`
 <div style="text-align:center;margin-top:20px">
 <button class="btn btn-p" id="start-btn" style="padding:14px 48px;font-size:1rem" disabled>🚀 开始面试</button>
 </div>
+<div class="pro-section" onclick="showProModal()">
+  <div class="pro-overlay">
+    <div class="pro-lock-icon">🔒</div>
+    <div class="pro-label">Pro AI 模拟面试 + 行业题库</div>
+    <div class="pro-hint">点击解锁完整 Pro 功能</div>
+  </div>
+  <div class="pro-blur-content">
+    <div class="card">
+      <div style="font-size:1rem;font-weight:600;margin-bottom:12px">🎯 Pro 专属功能</div>
+      <div class="pro-feat-grid">
+        <div class="pro-feat-item"><div class="pfi">🤖</div><div class="pfn">AI 实时模拟面试</div><div class="pfd">语音对话式面试模拟</div></div>
+        <div class="pro-feat-item"><div class="pfi">📚</div><div class="pfn">行业专属题库</div><div class="pfd">金融/医疗/法律等行业</div></div>
+        <div class="pro-feat-item"><div class="pfi">📊</div><div class="pfn">深度能力分析</div><div class="pfd">多维雷达图评估</div></div>
+        <div class="pro-feat-item"><div class="pfi">🏆</div><div class="pfn">面试策略报告</div><div class="pfd">个性化提升建议</div></div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>`;
 const jg=document.getElementById("job-grid");
 JOBS.forEach(j=>{
@@ -889,6 +935,27 @@ render();
 document.getElementById("nav-home").onclick=()=>{resetToSetup();};
 document.getElementById("nav-hist").onclick=()=>{S.page="history";render();};
 render();
+</script>
+<div class="pro-modal-overlay" id="proModal" onclick="if(event.target===this)hideProModal()">
+<div class="pro-modal">
+<button class="pm-close" onclick="hideProModal()">&times;</button>
+<h2>🚀 Unlock Pro Interview Prep</h2>
+<p class="pm-sub">Master your interviews with advanced AI tools</p>
+<ul>
+<li><span>✅</span> AI real-time mock interviews with voice</li>
+<li><span>✅</span> Industry-specific question banks (Finance, Healthcare, Legal, etc.)</li>
+<li><span>✅</span> Multi-dimensional ability radar analysis</li>
+<li><span>✅</span> Personalized interview strategy reports</li>
+<li><span>✅</span> Unlimited interview history & analytics</li>
+<li><span>✅</span> Expert-level reference answers</li>
+</ul>
+<a class="pm-cta" href="https://feifeicch.gumroad.com/ai-interview-prep" target="_blank" rel="noopener">Upgrade to Pro — $14</a>
+<button class="pm-later" onclick="hideProModal()">Maybe later</button>
+</div>
+</div>
+<script>
+function showProModal(){document.getElementById('proModal').classList.add('active');}
+function hideProModal(){document.getElementById('proModal').classList.remove('active');}
 </script>
 <script async src="https://cdn.siteanalyze.io/monetize.js"></script>
 </body>
